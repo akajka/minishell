@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:31:01 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/04 01:54:01 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/04 21:32:48 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,25 @@ void		handle_arg(t_arg *arg, int *count)
 		find_command(arg);
 		*count = -1;
 		ft_strclr(arg->buf);
-		while (arg->argv[++i])
-			free(arg->argv[i]);
-		free(arg->argv);
+//		while (arg->argv[++i])
+//			ft_strdel(arg->argv[i]);
+//		free(arg->argv);
 	}
+	ft_putstr("\033[1;36m");
 	write(1, "minishell> ", 11);
+	ft_putstr("\033[0m");
 }
 
 void		ft_welcome(char c)
 {
+	ft_putstr("\033[1;36m");
 	if (c == '\n')
 		write(1, "minishell> ", 11);
 	else if (c == '\'')
 		write(1, "quote> ", 8);
 	else
 		write(1, "bquote> ", 9);
+	ft_putstr("\033[0m");
 }
 
 void		loop(t_arg *arg, int *count, char c)
@@ -53,6 +57,7 @@ void		loop(t_arg *arg, int *count, char c)
 			arg->buf[++*count] = buf[0];
 		else
 		{
+			arg->buf[++*count] = '\0';
 			if (c != '\n')
 				break ;
 			handle_arg(arg, count);

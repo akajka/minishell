@@ -1,17 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.h                                             :+:      :+:    :+:   */
+/*   exec_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/04 02:01:52 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/04 02:02:41 by akorobov         ###   ########.fr       */
+/*   Created: 2019/02/04 17:14:15 by akorobov          #+#    #+#             */
+/*   Updated: 2019/02/04 17:54:30 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ECHO_H
-#define ECHO_H
 #include "minishell.h"
 
-#endif
+void	exec_env()
+{
+	int	count;
+
+	count = -1;
+	while (environ[++count])
+		printf("%s\n", environ[count]);
+}
+
+/*void	exec_setenv()
+{}*/

@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/04 01:56:05 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/04 22:23:06 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,11 @@ void			parse_buf(t_arg *arg, int i);
 void			findchar(t_arg *arg, char c, int *count);
 void			getargv(t_arg *arg);
 void			hendle_arg(t_arg *arg);
-void			find_command(t_arg *arg);
+int				find_command(t_arg *arg);
+void			exec_echo(t_arg *arg);
+void			exec_env();
+void			exec_cd(t_arg *arg);
+void			exec_pwd(t_arg *arg);
+void			exec_exit(t_arg *arg);
 
 #endif

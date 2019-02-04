@@ -4,7 +4,7 @@ SRC_DIR = ./src/
 OBJ_DIR = ./obj/
 INC_DIR = ./inc/
 
-SRC = main.c find_command.c getargv.c
+SRC = main.c find_command.c getargv.c exec_cd.c exec_echo.c exec_env.c exec_exit.c exec_pwd.c
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
@@ -21,7 +21,6 @@ CC = gcc
 all: $(NAME)
 
 $(NAME): $(LIBFT) $(OBJ)
-	make -C $(SRC_DIR)echo
 	$(CC) $(OBJ) $(LIBFT) -o $(NAME)
 
 $(OBJ): | $(OBJ_DIR)
