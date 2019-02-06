@@ -1,26 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_pwd.c                                         :+:      :+:    :+:   */
+/*   exec_history.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/04 18:02:47 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/06 12:13:57 by akorobov         ###   ########.fr       */
+/*   Created: 2019/02/06 14:44:29 by akorobov          #+#    #+#             */
+/*   Updated: 2019/02/06 15:01:51 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exec_pwd(t_arg *arg)
+void		exec_history(t_arg *arg)
 {
-	char	dir[1024];
+	t_list	*p;
 
-	if (arg->argc == 1)
+	p = arg->history;
+	while (p)
 	{
-		getcwd(dir, 1024);
-		write(1, dir, ft_strlen(dir));
+		if (p->content)
+			ft_putendl(p->content);
+		p = p->next;
 	}
-	else
-		write(2, "pwd: too many arguments", 23);
 }

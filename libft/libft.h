@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/25 10:02:37 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/04 02:01:02 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/06 15:10:02 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ typedef struct		s_list
 	void			*content;
 	size_t			content_size;
 	struct s_list	*next;
+	struct s_list	*prev;
 }					t_list;
 
 char				*ft_memset(void *buf, int ch, size_t count);
@@ -36,6 +37,7 @@ char				*ft_strncpy(char *dest, const char *src, size_t n);
 char				*ft_strcat(char *dest, const char *src);
 char				*ft_strncat(char *dest, const char *src, size_t n);
 size_t				ft_strlcat(char *dest, const char *src, size_t s);
+int					ft_strchr_int(char *str, int ch);
 char				*ft_strchr(char *str, int ch);
 char				*ft_strrchr(const char *str, int ch);
 char				*ft_strstr(const char *str, const char *to_find);

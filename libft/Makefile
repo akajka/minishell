@@ -20,6 +20,7 @@ SRC = ft_lstmap.c\
 	  ft_bzero.c\
 	  ft_memcmp.c\
 	  ft_strchr.c\
+	  ft_strchr_int.c\
 	  ft_strnequ.c\
 	  ft_digit_size.c\
 	  ft_memcpy.c\
@@ -68,8 +69,8 @@ HDRS = libft.h
 all: $(NAME)
 
 $(NAME):
-	gcc -Wall -c -Wextra -Werror -I $(HDRS) $(SRC)
-	ar rc $(NAME) *.o
+	@gcc -Wall -c -Wextra -Werror -I $(HDRS) $(SRC)
+	@ar rc $(NAME) *.o
 
 clean:
 	rm -rf *.o

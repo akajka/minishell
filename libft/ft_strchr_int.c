@@ -1,26 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_pwd.c                                         :+:      :+:    :+:   */
+/*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/04 18:02:47 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/06 12:13:57 by akorobov         ###   ########.fr       */
+/*   Created: 2018/07/17 15:33:33 by akorobov          #+#    #+#             */
+/*   Updated: 2019/02/05 23:16:06 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void	exec_pwd(t_arg *arg)
+int			ft_strchr_int(char *str, int ch)
 {
-	char	dir[1024];
+	int		i;
 
-	if (arg->argc == 1)
+	i = 0;
+	while (str[i] != '\0')
 	{
-		getcwd(dir, 1024);
-		write(1, dir, ft_strlen(dir));
+		if (str[i + 1] == '\0' && (char)ch == '\0')
+			return (0);
+		if (str[i] == ch)
+			return (i);
+		i++;
 	}
-	else
-		write(2, "pwd: too many arguments", 23);
+	return (0);
 }

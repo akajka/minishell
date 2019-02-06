@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 22:21:21 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/04 22:22:17 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/05 17:10:47 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 void	exec_exit(t_arg *arg)
 {
-	arg->argc++;
+	int	i;
+
+	i = -1;
+	while (arg->argv[++i])
+		ft_strdel(&arg->argv[i]);
+	free(arg->argv);
 	exit(EXIT_SUCCESS);
 }

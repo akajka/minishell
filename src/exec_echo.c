@@ -6,26 +6,32 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 16:33:21 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/04 22:24:03 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/06 13:22:07 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		output_echo(char *argv)
+int			output_echo(char *argv)
 {
 	int		i;
 
 	i = 0;
 	while (argv[i])
 	{
-		if (argv[i] != '\"' || (i - 1 > 0 && argv[i - 1] == '\\'))
-			write(1, &argv[i], 1);
+		if ((argv[i] != '\"' && argv[i] != '`' && (argv[i] != '\'' ||
+						(argv[i] == '\'' && i - 1 >= 0 &&
+						 ft_strchr(argv, '\"')))) ||
+				(i - 1 > 0 && argv[i - 1] == '\\'))
+				write(1, &argv[i], 1);
+		if (argv[i] == '`')
+			return (i);
 		i++;
 	}
+	return (i);
 }
 
-int			handle_echo(char *adr)
+void		handle_echo(char *adr)
 {
 	t_arg	tmp_arg;
 	int		count;
@@ -37,32 +43,23 @@ int			handle_echo(char *adr)
 	ret = 0;
 	while (tmp_arg.argv[++count])
 	{
-		if (count % 2 == 0)
-			ret = find_command(&tmp_arg);
+		find_command(&tmp_arg);
 		free(tmp_arg.argv[count]);
 	}
 	free(tmp_arg.argv);
-	return (ret);
 }
 
 void		exec_echo(t_arg *arg)
 {
 	int		i;
-	int		ret;
-	char	*adr;
+	int		j;
 
 	i = 1;
-	ret = 0;
 	while (arg->argc-- != 1)
 	{
-		if ((adr = ft_strchr(arg->argv[i], '`')))
-		{
-			ret = handle_echo(adr);
-			ft_strdel(&adr);
-		}
-		else
-			output_echo(arg->argv[i++]);
+		j = output_echo(arg->argv[i]);
+		if (arg->argv[i][j] == '`')
+			handle_echo(&arg->argv[i][j]);
+		write(1, " ", 1);
 	}
-	if (!ret)
-		write(1, "\n", 1);
 }
