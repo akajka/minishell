@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 19:29:46 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 13:31:54 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/07 16:24:36 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void		system_builtins(t_arg *arg)
 	{
 		i = 0;
 		ft_strcpy(path, arg->argv[0]);
-		while (path[0])
+		while (path[0] != '\0')
 		{
 			execve(path, arg->argv, environ);
 			tmp += i;
@@ -55,7 +55,7 @@ void		system_builtins(t_arg *arg)
 		}
 		write(2, "minishell: command not found: ", 30);
 		write(2, arg->argv[0], ft_strlen(arg->argv[0]));
-		write(1, "\n", 1);
+		write(2, "\n", 1);
 		exit(1);
 	}
 	else
@@ -86,5 +86,5 @@ void		find_command(t_arg *arg)
 	else if (++i)
 		system_builtins(arg);
 	if (!i)
-		write(1, "\n", 1);
+		write(2, "\n", 1);
 }

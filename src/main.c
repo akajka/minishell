@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:31:01 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 13:28:45 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/07 18:44:38 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void		handle_arg(t_arg *arg, int *count)
 	int		i;
 
 	i = -1;
-	if (arg->buf[0])
+	if (arg->buf[0] != '\0')
 	{
 		getargv(arg);
 		find_command(arg);
@@ -29,6 +29,7 @@ void		handle_arg(t_arg *arg, int *count)
 	}
 	if (arg->sig == 0)
 	{
+		*count = -1;
 		ft_putstr("\033[1;36m");
 		write(1, "minishell> ", 11);
 		ft_putstr("\033[0m");
@@ -40,6 +41,8 @@ void		ft_welcome(char c)
 	ft_putstr("\033[1;36m");
 	if (c == '\n')
 		write(1, "minishell> ", 11);
+	else if (c == '\\')
+		write(1, "> ", 2);
 	else if (c == '\'')
 		write(1, "quote> ", 8);
 	else
@@ -60,10 +63,7 @@ void		loop(t_arg *arg, int *count, char c)
 			arg->buf[++*count] = buf[0];
 		else
 		{
-			if (buf[0] == ';')
-				arg->sig = 1;
-			else
-				arg->sig = 0;
+			arg->sig = (buf[0] == ';' ? 1 : 0);
 			arg->buf[++*count] = '\0';
 			if (c != '\n')
 				break ;
@@ -83,9 +83,9 @@ int			main()
 	arg->history = (t_list *)malloc(sizeof(t_list));
 	arg->history->content = NULL;
 	arg->history->next = NULL;
-//	arg->cd = (t_list *)malloc(sizeof(t_list));
-//	arg->cd->content = NULL;
-//	arg->cd->next = NULL;
+	arg->cd = (t_list *)malloc(sizeof(t_list));
+	arg->cd->content = NULL;
+	arg->cd->next = NULL;
 	loop(arg, &count, '\n');
 	return (EXIT_SUCCESS);
 }
