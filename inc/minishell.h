@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/06 15:31:56 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/07 11:35:10 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,14 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "../libft/libft.h"
+#include <ncurses.h>
 
 extern char		**environ;
 
 typedef struct	s_arg
 {
+	WINDOW		*local_win;
+	int			col_cmd;
 	t_list		*history;
 	t_list		*cd;
 	int			sig;

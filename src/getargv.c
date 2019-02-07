@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 20:36:06 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/06 15:31:27 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/07 10:44:29 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ void		getargv(t_arg *arg)
 
 	arg->argc = -1;
 	parse_buf(arg, -1);
-	if (ft_strncmp(arg->buf, "history", 7))
+	if (ft_strncmp(arg->buf, "history", 7) && arg->col_cmd++)
 		add_elem_history(arg);
 	arg->argv = ft_strsplit(arg->buf, ' ');
 	while (arg->argv[++arg->argc])

@@ -6,11 +6,11 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:31:01 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/06 15:34:14 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/07 11:40:04 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../inc/minishell.h"
+#include "minishell.h"
 
 void		handle_arg(t_arg *arg, int *count)
 {
@@ -72,6 +72,14 @@ void		loop(t_arg *arg, int *count, char c)
 	}
 }
 
+/*void		init_ncurses(t_arg *arg)
+{
+	initscr();
+	keypad(stdscr, TRUE);
+	arg->local_win = newwin(0, 0, 0, 0);
+	wrefresh(arg->local_win);	
+}*/
+
 int			main()
 {
 	t_arg	*arg;
@@ -79,12 +87,14 @@ int			main()
 
 	count = -1;
 	arg = (t_arg *)malloc(sizeof(arg));
+	arg->col_cmd = 0;
 	arg->history = (t_list *)malloc(sizeof(t_list));
 	arg->history->content = NULL;
 	arg->history->next = NULL;
 	arg->cd = (t_list *)malloc(sizeof(t_list));
 	arg->cd->content = NULL;
 	arg->cd->next = NULL;
+//	init_ncurses(arg);
 	loop(arg, &count, '\n');
 	return (EXIT_SUCCESS);
 }
