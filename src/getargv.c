@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 20:36:06 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 18:53:31 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/07 20:04:56 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,21 +61,6 @@ void		findchar(t_arg *arg, char c, int *count)
 	*count = i;
 }
 
-void		parse_buf(t_arg *arg, int i)
-{
-	if (arg->buf[0] == '\t')
-		arg->buf[0] = ' ';
-	while (arg->buf[++i] != '\0')
-	{
-		if (arg->buf[i] == '\"' && i - 1 >= 0 && arg->buf[i - 1] != '\\')
-			findchar(arg, '\"', &i);
-		else if (arg->buf[i] == '\'' && i - 1 >= 0 && arg->buf[i - 1] != '\\')
-			findchar(arg, '\'', &i);
-		else if (arg->buf[i] == '`' && i - 1 >= 0 && arg->buf[i - 1] != '\\')
-			findchar(arg, '`', &i);
-	}
-}
-
 void		add_elem_history(t_arg *arg)
 {
 	t_list	*tmp;
@@ -93,8 +78,7 @@ void		getargv(t_arg *arg)
 	int		i;
 
 	arg->argc = -1;
-	parse_buf(arg, -1);
-	arg->argv = ft_strsplit(arg->buf, ' ');
+	
 	if (!ft_strncmp(arg->argv[0], "history", 7))
 		add_elem_history(arg);
 	while (arg->argv[++arg->argc])

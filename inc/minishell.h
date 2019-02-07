@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 15:51:00 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/07 19:38:56 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,17 @@
 
 extern char		**environ;
 
+typedef struct	s_parser
+{
+	int			single_quote;
+	int			double_quote;
+	int			binary_quote;
+	int			slash;
+}				t_parser
+
 typedef struct	s_arg
 {
+	t_parser	parse;
 	int			col_cmd;
 	t_list		*history;
 	t_list		*cd;
@@ -35,7 +44,6 @@ typedef struct	s_arg
 }				t_arg;
 
 void			loop(t_arg *arg, int *count, char c);
-void			parse_buf(t_arg *arg, int i);
 void			findchar(t_arg *arg, char c, int *count);
 void			getargv(t_arg *arg);
 void			hendle_arg(t_arg *arg);
