@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 19:29:46 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 10:44:29 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/07 13:31:54 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,8 @@ void		find_command(t_arg *arg)
 	i = 0;
 	if (!ft_strcmp(arg->argv[0], "echo"))
 		exec_echo(arg);
-	else if (!ft_strcmp(arg->argv[0], "history") && ++i)
-		exec_history(arg);
+//	else if (!ft_strcmp(arg->argv[0], "history") && ++i)
+//		exec_history(arg);
 	else if (!ft_strcmp(arg->argv[0], "env"))
 		exec_env(arg);
 	else if (!ft_strcmp(arg->argv[0], "setenv") && ++i)

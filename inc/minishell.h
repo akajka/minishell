@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 11:35:10 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/07 13:32:01 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,11 @@
 #include <stdio.h>
 #include <unistd.h>
 #include "../libft/libft.h"
-#include <ncurses.h>
 
 extern char		**environ;
 
 typedef struct	s_arg
 {
-	WINDOW		*local_win;
 	int			col_cmd;
 	t_list		*history;
 	t_list		*cd;
@@ -44,7 +42,7 @@ void			hendle_arg(t_arg *arg);
 void			find_command(t_arg *arg);
 void			system_builtins(t_arg *arg);
 void			exec_echo(t_arg *arg);
-void			exec_history(t_arg *arg);
+//void			exec_history(t_arg *arg);
 void			exec_env(t_arg *arg);
 void			exec_setenv(t_arg *arg);
 void			exec_unsetenv(t_arg *arg);

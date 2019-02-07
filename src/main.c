@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:31:01 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 11:40:04 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/07 13:28:45 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,6 @@ void		loop(t_arg *arg, int *count, char c)
 	}
 }
 
-/*void		init_ncurses(t_arg *arg)
-{
-	initscr();
-	keypad(stdscr, TRUE);
-	arg->local_win = newwin(0, 0, 0, 0);
-	wrefresh(arg->local_win);	
-}*/
-
 int			main()
 {
 	t_arg	*arg;
@@ -91,10 +83,9 @@ int			main()
 	arg->history = (t_list *)malloc(sizeof(t_list));
 	arg->history->content = NULL;
 	arg->history->next = NULL;
-	arg->cd = (t_list *)malloc(sizeof(t_list));
-	arg->cd->content = NULL;
-	arg->cd->next = NULL;
-//	init_ncurses(arg);
+//	arg->cd = (t_list *)malloc(sizeof(t_list));
+//	arg->cd->content = NULL;
+//	arg->cd->next = NULL;
 	loop(arg, &count, '\n');
 	return (EXIT_SUCCESS);
 }
