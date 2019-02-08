@@ -6,56 +6,55 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:55:11 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 10:44:29 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/08 22:46:08 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		handle_noun_cd(t_arg *arg)
+void		croldpwd(t_arg *arg)
 {
 	int		i;
-	t_list	*p;
+	t_arg	tmp;
 
-	i = 1;
-	if (ft_strlen(arg->argv[1]) != 1)
-		i = ft_atoi(&arg->argv[1][1]);
-	p = arg->cd->next;
-	while (i-- && p)
-		p = p->next;
-	ft_strdel(&arg->argv[1]);
-	if (!i)
-	{
-		if (p && p->content)
-			arg->argv[1] = ft_strdup(p->content);
-		ft_strdel((char **)&p->content);
-		free(p);
-	}
+	tmp.argc = 2;
+	ft_strclr(arg->oldpwd);
+	ft_strcpy(tmp.buf, "setenv OLDPWD=");
+	getcwd(arg->oldpwd, 1024);
+	ft_strcat(tmp.buf, arg->oldpwd);
+	getargv(&tmp);
+	exec_setenv(&tmp);
+	i = -1;
+	while (tmp.argv[++i])
+		ft_strdel(&tmp.argv[i]);
+	free(tmp.argv);
 }
 
-void		get_pwd_cd(t_arg *arg)
+void		getoldpwd(t_arg *arg)
 {
-	char	dir[1024];
-	t_list	*p;
-	t_list	*tmp;
+	int		i;
 
-	tmp = (t_list *)malloc(sizeof(t_list));
-	p = arg->cd->next;
-	arg->cd->next = tmp;
-	getcwd(dir, 1024);
-	tmp->content = ft_strdup(dir);
-	tmp->next = p;
+	i = -1;
+	ft_strdel(&arg->argv[1]);
+	if (arg->oldpwd[0] != '\0')
+		arg->argv[1] = ft_strdup(arg->oldpwd);
+	else
+	{
+		while (ft_strncmp(environ[++i], "OLDPWD", 6))
+			continue ;
+		arg->argv[1] = ft_strsub(environ[i], 7, ft_strlen(environ[i]));
+	}
 }
 
 void		exec_cd(t_arg *arg)
 {
-	get_pwd_cd(arg);
 	if (arg->argc <= 2 && arg->argc >= 1)
 	{
-		if (arg->argv[1][0] == '-')
-			handle_noun_cd(arg);
 		if (arg->argc == 1 || !arg->argv[1])
 			arg->argv[1] = ft_strdup(".");
+		if (!ft_strcmp(arg->argv[1], "-"))
+			getoldpwd(arg);
+		croldpwd(arg);
 		if (chdir(arg->argv[1]) == -1)
 		{
 			write(2, "cd: no such file or directory: ", 31);

@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 19:29:46 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 16:24:36 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/08 23:03:09 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ void		system_builtins(t_arg *arg)
 
 	i = -1;
 	pid = fork();
+	tmp = NULL;
 	while (environ[++i] && ft_strncmp(environ[i], "PATH=", 5))
 		continue ;
 	tmp = *(environ + i);
@@ -64,27 +65,22 @@ void		system_builtins(t_arg *arg)
 
 void		find_command(t_arg *arg)
 {
-	int		i;
-
-	i = 0;
 	if (!ft_strcmp(arg->argv[0], "echo"))
 		exec_echo(arg);
-//	else if (!ft_strcmp(arg->argv[0], "history") && ++i)
-//		exec_history(arg);
 	else if (!ft_strcmp(arg->argv[0], "env"))
 		exec_env(arg);
-	else if (!ft_strcmp(arg->argv[0], "setenv") && ++i)
+	else if (!ft_strcmp(arg->argv[0], "setenv"))
 		exec_setenv(arg);
-	else if (!ft_strcmp(arg->argv[0], "cd") && ++i)
+	else if (!ft_strcmp(arg->argv[0], "cd"))
 		exec_cd(arg);
 	else if (!ft_strcmp(arg->argv[0], "pwd"))
 		exec_pwd(arg);
-	else if (!ft_strcmp(arg->argv[0], "unsetenv") && ++i)
+	else if (!ft_strcmp(arg->argv[0], "unsetenv"))
 		exec_unsetenv(arg);
+	else if (!ft_strcmp(arg->argv[0], "clear"))
+		write(1, "\e[1;1H\e[2J", 11);
 	else if (!ft_strcmp(arg->argv[0], "exit"))
 		exec_exit(arg);
-	else if (++i)
+	else
 		system_builtins(arg);
-	if (!i)
-		write(2, "\n", 1);
 }

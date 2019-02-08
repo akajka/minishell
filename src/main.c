@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:31:01 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 20:57:27 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/08 16:52:09 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,13 @@ void		handle_arg(t_arg *arg, int *count)
 			ft_strdel(&arg->argv[i]);
 		free(arg->argv);
 	}
-	ft_putstr("\033[1;36m");
-	write(1, "minishell> ", 11);
-	ft_putstr("\033[0m");
+	if (arg->sig == 0)
+	{
+		*count = -1;
+		ft_putstr("\033[1;36m");
+		write(1, "minishell> ", 11);
+		ft_putstr("\033[0m");
+	}
 }
 
 void		ft_welcome(char c)
@@ -55,10 +59,11 @@ void		loop(t_arg *arg, int *count, char c)
 		arg->buf[++*count] = '\n';
 	while (read(0, buf, 1))
 	{
-		if (buf[0] != '\n')
+		if (buf[0] != '\n' && buf[0] != ';')
 			arg->buf[++*count] = buf[0];
 		else
 		{
+			arg->sig = (buf[0] == ';' ? 1 : 0);
 			arg->buf[++*count] = '\0';
 			if (c != '\n')
 				break ;
@@ -74,17 +79,6 @@ int			main()
 
 	count = -1;
 	arg = (t_arg *)malloc(sizeof(arg));
-	arg->col_cmd = 0;
-	arg->parse->single_quote = 0;
-	arg->parse->double_quote = 0;
-	arg->parse->binary_quote = 0;
-	arg->parse->slash = 0;
-	arg->history = (t_list *)malloc(sizeof(t_list));
-	arg->history->content = NULL;
-	arg->history->next = NULL;
-	arg->cd = (t_list *)malloc(sizeof(t_list));
-	arg->cd->content = NULL;
-	arg->cd->next = NULL;
 	loop(arg, &count, '\n');
 	return (EXIT_SUCCESS);
 }

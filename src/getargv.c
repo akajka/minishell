@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 20:36:06 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 20:04:56 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/08 22:51:42 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,16 +61,21 @@ void		findchar(t_arg *arg, char c, int *count)
 	*count = i;
 }
 
-void		add_elem_history(t_arg *arg)
+void		parse_buf(t_arg *arg, int i)
 {
-	t_list	*tmp;
-	t_list	*p;
-
-	tmp = (t_list *)malloc(sizeof(t_list));
-	p = arg->history->next;
-	arg->history->next = tmp;
-	tmp->content = ft_strdup(arg->buf);
-	tmp->next = p;
+	if (arg->buf[0] == '\t')
+		arg->buf[0] = ' ';
+	while (arg->buf[++i] != '\0')
+	{
+		if (arg->buf[i] == '\"' && i - 1 >= 0 && arg->buf[i - 1] != '\\')
+			findchar(arg, '\"', &i);
+		else if (arg->buf[i] == '\'' && i - 1 >= 0 && arg->buf[i - 1] != '\\')
+			findchar(arg, '\'', &i);
+		else if (arg->buf[i] == '`' && i - 1 >= 0 && arg->buf[i - 1] != '\\')
+			findchar(arg, '`', &i);
+	}
+	if (arg->buf[i - 1] == '\t')
+		arg->buf[i - 1] = ' ';
 }
 
 void		getargv(t_arg *arg)
@@ -78,9 +83,8 @@ void		getargv(t_arg *arg)
 	int		i;
 
 	arg->argc = -1;
-	
-	if (!ft_strncmp(arg->argv[0], "history", 7))
-		add_elem_history(arg);
+	parse_buf(arg, -1);
+	arg->argv = ft_strsplit(arg->buf, ' ');
 	while (arg->argv[++arg->argc])
 	{
 		if (!ft_strcmp(arg->argv[arg->argc], "~"))

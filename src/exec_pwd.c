@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 18:02:47 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 10:44:29 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/08 18:00:18 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ void	exec_pwd(t_arg *arg)
 	{
 		getcwd(dir, 1024);
 		write(1, dir, ft_strlen(dir));
+		write(1, "\n", 1);
 	}
 	else
-		write(2, "pwd: too many arguments", 23);
+		write(2, "pwd: too many arguments\n", 24);
 }

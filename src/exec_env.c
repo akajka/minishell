@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:14:15 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/07 10:44:29 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/08 19:18:46 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void		exec_env(t_arg *arg)
 		}
 	else
 		write(2, "pwd: too many arguments", 23);
+	write(2, "\n", 1);
 }
 
 void		exec_setenv(t_arg *arg)
@@ -48,9 +49,11 @@ void		exec_setenv(t_arg *arg)
 			if (environ[i])
 				ft_strclr(environ[i]);
 			else
+			{
 				environ[i] = (char *)malloc(ft_strlen(arg->argv[1]));
+				environ[i + 1] = NULL;
+			}
 			ft_strcpy(environ[i], arg->argv[1]);
-			environ[i + 1] = NULL;
 		}
 	}
 	else

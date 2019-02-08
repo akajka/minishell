@@ -4,7 +4,7 @@ SRC_DIR = ./src/
 OBJ_DIR = ./obj/
 INC_DIR = ./inc/
 
-SRC = main.c find_command.c getargv.c exec_cd.c exec_echo.c exec_env.c exec_exit.c exec_pwd.c exec_history.c
+SRC = main.c find_command.c getargv.c exec_cd.c exec_echo.c exec_env.c exec_exit.c exec_pwd.c
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 
@@ -15,7 +15,7 @@ HEAD = $(INC_DIR)minishell.h
 
 HEADER_FLAGS = -I $(INC_DIR) -I $(LIBFT_INC)
 
-CC_FLAGS = -g -Wall -Wextra -Werror
+CC_FLAGS = -Wall -Wextra -Werror
 CC = gcc
 
 all: $(NAME)
