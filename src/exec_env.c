@@ -6,15 +6,16 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:14:15 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/08 19:18:46 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/09 22:33:12 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		exec_env(t_arg *arg)
+void			exec_env(t_arg *arg)
 {
-	int		count;
+	extern char **environ;
+	int			count;
 
 	count = -1;
 	if (arg->argc < 2)
@@ -29,47 +30,40 @@ void		exec_env(t_arg *arg)
 	write(2, "\n", 1);
 }
 
-void		exec_setenv(t_arg *arg)
+void			exec_setenv(t_arg *arg)
 {
-	int		i;
-	int		n;
+	extern char **environ;
+	int			i;
+	int			n;
 
-	if (arg->argc == 2)
+	n = (arg->argc == 2 ? ft_strchr_int(arg->argv[1], '=') : 0);
+	if (n)
 	{
-		n = 0;
-		while (arg->argv[1][n] && arg->argv[1][n] != '=')
-			n++;
-		if (!arg->argv[1][n])
-			write(2, "usage setenv\n", 13);
+		i = -1;
+		while (environ[++i] && ft_strncmp(environ[i], arg->argv[1], n))
+			continue ;
+		if (environ[i])
+			ft_strclr(environ[i]);
 		else
 		{
-			i = -1;
-			while (environ[++i] && ft_strncmp(environ[i], arg->argv[1], n))
-				continue ;
-			if (environ[i])
-				ft_strclr(environ[i]);
-			else
-			{
-				environ[i] = (char *)malloc(ft_strlen(arg->argv[1]));
-				environ[i + 1] = NULL;
-			}
-			ft_strcpy(environ[i], arg->argv[1]);
+			environ[i] = (char *)malloc(ft_strlen(arg->argv[1]) + 1);
+			environ[i + 1] = NULL;
 		}
+		ft_strcpy(environ[i], arg->argv[1]);
 	}
 	else
 		write(2, "usage setenv\n", 13);
 }
 
-void		exec_unsetenv(t_arg *arg)
+void			exec_unsetenv(t_arg *arg)
 {
-	int		i;
+	extern char **environ;
+	int			i;
 
 	i = -1;
 	if (arg->argc == 2)
 	{
-		while (environ[++i] && ft_strncmp(environ[i], arg->argv[1],
-					ft_strlen(arg->argv[1])))
-			continue ;
+		i = env_finder(arg->argv[1]);
 		if (environ[i])
 			ft_strclr(environ[i]);
 		else

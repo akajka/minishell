@@ -6,16 +6,16 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:55:11 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/08 22:46:08 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/09 22:31:20 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		croldpwd(t_arg *arg)
+void			croldpwd(t_arg *arg)
 {
-	int		i;
-	t_arg	tmp;
+	int			i;
+	t_arg		tmp;
 
 	tmp.argc = 2;
 	ft_strclr(arg->oldpwd);
@@ -30,9 +30,10 @@ void		croldpwd(t_arg *arg)
 	free(tmp.argv);
 }
 
-void		getoldpwd(t_arg *arg)
+void			getoldpwd(t_arg *arg)
 {
-	int		i;
+	extern char **environ;
+	int			i;
 
 	i = -1;
 	ft_strdel(&arg->argv[1]);
@@ -46,12 +47,15 @@ void		getoldpwd(t_arg *arg)
 	}
 }
 
-void		exec_cd(t_arg *arg)
+void			exec_cd(t_arg *arg)
 {
 	if (arg->argc <= 2 && arg->argc >= 1)
 	{
-		if (arg->argc == 1 || !arg->argv[1])
+		if ((arg->argc == 1 || !arg->argv[1]) && arg->argc++)
+		{
 			arg->argv[1] = ft_strdup(".");
+			arg->argv[2] = NULL;
+		}
 		if (!ft_strcmp(arg->argv[1], "-"))
 			getoldpwd(arg);
 		croldpwd(arg);

@@ -6,22 +6,20 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/08 16:59:37 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/09 22:28:20 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
-#include <stdlib.h>
-#include <fcntl.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <signal.h>
-#include <stdio.h>
-#include <unistd.h>
-#include "../libft/libft.h"
-
-extern char		**environ;
+# define MINISHELL_H
+# include <stdlib.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <signal.h>
+# include <stdio.h>
+# include <unistd.h>
+# include "../libft/libft.h"
 
 typedef struct	s_arg
 {
@@ -36,6 +34,7 @@ void			loop(t_arg *arg, int *count, char c);
 void			parse_buf(t_arg *arg, int i);
 void			findchar(t_arg *arg, char c, int *count);
 void			getargv(t_arg *arg);
+int				env_finder(char *tmp);
 void			hendle_arg(t_arg *arg);
 void			find_command(t_arg *arg);
 void			system_builtins(t_arg *arg);

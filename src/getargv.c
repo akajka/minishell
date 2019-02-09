@@ -6,46 +6,55 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 20:36:06 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/08 22:51:42 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/09 22:29:28 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		manage_env(int *adr, t_arg *arg)
+int				env_finder(char *tmp)
 {
-	int		i;
-	int		j;
-	char	*env;
-	char	buf[1024];
-	char	tmp[1024];
+	int			j;
+	extern char **environ;
+
+	j = -1;
+	while (environ[++j] && ft_strncmp(environ[j], tmp, ft_strlen(tmp)))
+		continue ;
+	return (j);
+}
+
+void			manage_env(int *adr, t_arg *arg)
+{
+	extern char **environ;
+	int			i;
+	int			j;
+	char		buf[1024];
+	char		tmp[1024];
 
 	i = -1;
 	while (++i >= 0 && arg->argv[arg->argc][*adr + i + 1] &&
-			arg->argv[arg->argc][*adr + i + 1] != ' ' &&
 			arg->argv[arg->argc][*adr + i + 1] != '$' &&
 			arg->argv[arg->argc][*adr + i + 1] != '`')
 			tmp[i] = arg->argv[arg->argc][*adr + i + 1];
 	tmp[i] = '\0';
-	j = -1;
-	while (environ[++j] && ft_strncmp(environ[j], tmp, ft_strlen(tmp)))
-		continue ;
+	j = env_finder(tmp);
 	ft_strcpy(buf, arg->argv[arg->argc]);
 	ft_strclr(&buf[*adr]);
 	if (environ[j])
-		ft_strcat(buf, (env = ft_strchr(environ[j], '=') + 1));
+		ft_strcat(buf, ft_strchr(environ[j], '=') + 1);
 	if (arg->argv[arg->argc][*adr + i + 1])
 		ft_strcat(buf, &arg->argv[arg->argc][*adr + i + 1]);
 	ft_strdel(&arg->argv[arg->argc]);
 	arg->argv[arg->argc] = ft_strdup(buf);
-	*adr = (arg->argv[arg->argc][*adr] != '$' ? *adr + ft_strlen(env):
-				ft_strlen(arg->argv[arg->argc]));
+	*adr = (arg->argv[arg->argc][*adr] != '$' ? *adr +
+			ft_strlen(ft_strchr(environ[j], '=') + 1):
+			ft_strlen(arg->argv[arg->argc]));
 }
 
-void		findchar(t_arg *arg, char c, int *count)
+void			findchar(t_arg *arg, char c, int *count)
 {
-	int		val;
-	int		i;
+	int			val;
+	int			i;
 
 	val = 0;
 	i = *count;
@@ -61,7 +70,7 @@ void		findchar(t_arg *arg, char c, int *count)
 	*count = i;
 }
 
-void		parse_buf(t_arg *arg, int i)
+void			parse_buf(t_arg *arg, int i)
 {
 	if (arg->buf[0] == '\t')
 		arg->buf[0] = ' ';
@@ -78,9 +87,9 @@ void		parse_buf(t_arg *arg, int i)
 		arg->buf[i - 1] = ' ';
 }
 
-void		getargv(t_arg *arg)
+void			getargv(t_arg *arg)
 {
-	int		i;
+	int			i;
 
 	arg->argc = -1;
 	parse_buf(arg, -1);

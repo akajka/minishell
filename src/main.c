@@ -6,15 +6,15 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:31:01 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/08 16:52:09 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/09 22:34:04 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void		handle_arg(t_arg *arg, int *count)
+void			handle_arg(t_arg *arg, int *count)
 {
-	int		i;
+	int			i;
 
 	i = -1;
 	if (arg->buf[0] != '\0')
@@ -36,7 +36,7 @@ void		handle_arg(t_arg *arg, int *count)
 	}
 }
 
-void		ft_welcome(char c)
+void			ft_welcome(char c)
 {
 	ft_putstr("\033[1;36m");
 	if (c == '\n')
@@ -50,9 +50,9 @@ void		ft_welcome(char c)
 	ft_putstr("\033[0m");
 }
 
-void		loop(t_arg *arg, int *count, char c)
+void			loop(t_arg *arg, int *count, char c)
 {
-	char	buf[1];
+	char		buf[1];
 
 	ft_welcome(c);
 	if (c != '\n')
@@ -72,13 +72,13 @@ void		loop(t_arg *arg, int *count, char c)
 	}
 }
 
-int			main()
+int				main(void)
 {
-	t_arg	*arg;
-	int		count;
+	t_arg		*arg;
+	int			count;
 
-	count = -1;
 	arg = (t_arg *)malloc(sizeof(arg));
+	count = -1;
 	loop(arg, &count, '\n');
 	return (EXIT_SUCCESS);
 }

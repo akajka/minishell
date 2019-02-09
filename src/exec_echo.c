@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 16:33:21 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/08 16:30:36 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/09 22:33:35 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int			output_echo(char *argv)
 						(argv[i] == '\'' && i - 1 >= 0 &&
 						 ft_strchr(argv, '\"')))) ||
 				(i - 1 > 0 && argv[i - 1] == '\\'))
-				write(1, &argv[i], 1);
+			write(1, &argv[i], 1);
 		if (argv[i] == '`')
 			return (i);
 		i++;

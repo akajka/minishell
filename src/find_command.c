@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 19:29:46 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/08 23:03:09 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/09 22:40:39 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,38 +27,43 @@ int			create_path(char *path, char *tmp, t_arg *arg)
 	return (i);
 }
 
+void			child_process(t_arg *arg, char *tmp)
+{
+	extern char **environ;
+	int			i;
+	char		path[1024];
+
+	i = 0;
+	ft_strcpy(path, arg->argv[0]);
+	while (path[0] != '\0')
+	{
+		execve(path, arg->argv, environ);
+		tmp += i;
+		if (*(tmp += 1) == '\0')
+			break ;
+		ft_strclr(path);
+		i = create_path(path, tmp, arg);
+	}
+	write(2, "minishell: command not found: ", 30);
+	write(2, arg->argv[0], ft_strlen(arg->argv[0]));
+	write(2, "\n", 1);
+	exit(1);
+}
+
 void		system_builtins(t_arg *arg)
 {
+	extern char **environ;
 	int		i;
 	pid_t	pid;
-	char	path[1024];
 	char	*tmp;
 
 	i = -1;
 	pid = fork();
-	tmp = NULL;
 	while (environ[++i] && ft_strncmp(environ[i], "PATH=", 5))
 		continue ;
-	tmp = *(environ + i);
-	tmp = ft_strchr(tmp, '=') + 1;
+	tmp = ft_strchr(*(environ + i), '=') + 1;
 	if (pid == 0)
-	{
-		i = 0;
-		ft_strcpy(path, arg->argv[0]);
-		while (path[0] != '\0')
-		{
-			execve(path, arg->argv, environ);
-			tmp += i;
-			if (*(tmp += 1) == '\0')
-				break ;
-			ft_strclr(path);
-			i = create_path(path, tmp, arg);
-		}
-		write(2, "minishell: command not found: ", 30);
-		write(2, arg->argv[0], ft_strlen(arg->argv[0]));
-		write(2, "\n", 1);
-		exit(1);
-	}
+		child_process(arg, tmp);
 	else
 		waitpid(pid, NULL, 0);
 }
