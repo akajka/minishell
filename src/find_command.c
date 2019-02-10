@@ -6,15 +6,15 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 19:29:46 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/09 22:40:39 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/10 15:06:36 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			create_path(char *path, char *tmp, t_arg *arg)
+int				create_path(char *path, char *tmp, t_arg *arg)
 {
-	int		i;
+	int			i;
 
 	i = 0;
 	while (*(tmp + i) && *(tmp + i) != ':')
@@ -23,7 +23,7 @@ int			create_path(char *path, char *tmp, t_arg *arg)
 		i++;
 	}
 	path[i] = '/';
-	ft_strcat(path,arg->argv[0]);
+	ft_strcat(path, arg->argv[0]);
 	return (i);
 }
 
@@ -50,12 +50,12 @@ void			child_process(t_arg *arg, char *tmp)
 	exit(1);
 }
 
-void		system_builtins(t_arg *arg)
+void			system_builtins(t_arg *arg)
 {
-	extern char **environ;
-	int		i;
-	pid_t	pid;
-	char	*tmp;
+	extern char	**environ;
+	int			i;
+	pid_t		pid;
+	char		*tmp;
 
 	i = -1;
 	pid = fork();
@@ -68,7 +68,7 @@ void		system_builtins(t_arg *arg)
 		waitpid(pid, NULL, 0);
 }
 
-void		find_command(t_arg *arg)
+void			find_command(t_arg *arg)
 {
 	if (!ft_strcmp(arg->argv[0], "echo"))
 		exec_echo(arg);

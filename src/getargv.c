@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 20:36:06 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/09 22:29:28 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/10 15:07:35 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void			manage_env(int *adr, t_arg *arg)
 	while (++i >= 0 && arg->argv[arg->argc][*adr + i + 1] &&
 			arg->argv[arg->argc][*adr + i + 1] != '$' &&
 			arg->argv[arg->argc][*adr + i + 1] != '`')
-			tmp[i] = arg->argv[arg->argc][*adr + i + 1];
+		tmp[i] = arg->argv[arg->argc][*adr + i + 1];
 	tmp[i] = '\0';
 	j = env_finder(tmp);
 	ft_strcpy(buf, arg->argv[arg->argc]);
@@ -47,7 +47,7 @@ void			manage_env(int *adr, t_arg *arg)
 	ft_strdel(&arg->argv[arg->argc]);
 	arg->argv[arg->argc] = ft_strdup(buf);
 	*adr = (arg->argv[arg->argc][*adr] != '$' ? *adr +
-			ft_strlen(ft_strchr(environ[j], '=') + 1):
+			ft_strlen(ft_strchr(environ[j], '=') + 1) :
 			ft_strlen(arg->argv[arg->argc]));
 }
 

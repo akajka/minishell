@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:31:01 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/09 22:34:04 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/10 14:55:55 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,9 @@ void			loop(t_arg *arg, int *count, char c)
 			arg->buf[++*count] = buf[0];
 		else
 		{
+			if (buf[0] == ';' && ft_strchr_int(arg->buf, '"') % 2)
+				continue ;
 			arg->sig = (buf[0] == ';' ? 1 : 0);
-			arg->buf[++*count] = '\0';
 			if (c != '\n')
 				break ;
 			handle_arg(arg, count);
@@ -79,6 +80,7 @@ int				main(void)
 
 	arg = (t_arg *)malloc(sizeof(arg));
 	count = -1;
+	ft_strclr(arg->buf);
 	loop(arg, &count, '\n');
 	return (EXIT_SUCCESS);
 }
