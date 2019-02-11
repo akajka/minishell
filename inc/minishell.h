@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/09 22:28:20 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 18:55:47 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 
 typedef struct	s_arg
 {
+	char		**env;
 	char		oldpwd[1024];
 	int			sig;
 	int			argc;
@@ -34,7 +35,7 @@ void			loop(t_arg *arg, int *count, char c);
 void			parse_buf(t_arg *arg, int i);
 void			findchar(t_arg *arg, char c, int *count);
 void			getargv(t_arg *arg);
-int				env_finder(char *tmp);
+int				env_finder(char *tmp, t_arg *arg);
 void			hendle_arg(t_arg *arg);
 void			find_command(t_arg *arg);
 void			system_builtins(t_arg *arg);

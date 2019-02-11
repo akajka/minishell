@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:55:11 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/09 22:31:20 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 20:55:00 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void			croldpwd(t_arg *arg)
 	ft_strcpy(tmp.buf, "setenv OLDPWD=");
 	getcwd(arg->oldpwd, 1024);
 	ft_strcat(tmp.buf, arg->oldpwd);
+	tmp.env = arg->env;
 	getargv(&tmp);
 	exec_setenv(&tmp);
 	i = -1;
@@ -32,7 +33,6 @@ void			croldpwd(t_arg *arg)
 
 void			getoldpwd(t_arg *arg)
 {
-	extern char **environ;
 	int			i;
 
 	i = -1;
@@ -41,28 +41,35 @@ void			getoldpwd(t_arg *arg)
 		arg->argv[1] = ft_strdup(arg->oldpwd);
 	else
 	{
-		while (ft_strncmp(environ[++i], "OLDPWD", 6))
+		while (ft_strncmp(arg->env[++i], "OLDPWD", 6))
 			continue ;
-		arg->argv[1] = ft_strsub(environ[i], 7, ft_strlen(environ[i]));
+		arg->argv[1] = ft_strdup(ft_strchr(arg->env[i], '='));
 	}
+}
+
+char			*gethome(char **env)
+{
+	int			i;
+
+	i = 0;
+	while (ft_strncmp(env[++i], "HOME", 4))
+		continue ;
+	return (ft_strchr(env[i], '=') + 1);
 }
 
 void			exec_cd(t_arg *arg)
 {
 	if (arg->argc <= 2 && arg->argc >= 1)
 	{
-		if ((arg->argc == 1 || !arg->argv[1]) && arg->argc++)
-		{
-			arg->argv[1] = ft_strdup(".");
-			arg->argv[2] = NULL;
-		}
-		if (!ft_strcmp(arg->argv[1], "-"))
+		if (arg->argv[1] && !ft_strcmp(arg->argv[1], "-"))
 			getoldpwd(arg);
 		croldpwd(arg);
-		if (chdir(arg->argv[1]) == -1)
+		if ((arg->argv[1] ? chdir(arg->argv[1]) :
+					chdir(gethome(arg->env))) == -1)
 		{
 			write(2, "cd: no such file or directory: ", 31);
-			write(2, arg->argv[1], ft_strlen(arg->argv[1]));
+			write(2, (arg->argv[1] ? arg->argv[1] :
+						gethome(arg->env), ft_strlen(arg->argv[1]));
 			write(2, "\n", 1);
 		}
 	}

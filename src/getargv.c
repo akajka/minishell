@@ -6,26 +6,24 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 20:36:06 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/10 15:07:35 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 18:55:10 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int				env_finder(char *tmp)
+int				env_finder(char *tmp, t_arg *arg)
 {
 	int			j;
-	extern char **environ;
 
 	j = -1;
-	while (environ[++j] && ft_strncmp(environ[j], tmp, ft_strlen(tmp)))
+	while (arg->env[++j] && ft_strncmp(arg->env[j], tmp, ft_strlen(tmp)))
 		continue ;
 	return (j);
 }
 
 void			manage_env(int *adr, t_arg *arg)
 {
-	extern char **environ;
 	int			i;
 	int			j;
 	char		buf[1024];
@@ -37,17 +35,17 @@ void			manage_env(int *adr, t_arg *arg)
 			arg->argv[arg->argc][*adr + i + 1] != '`')
 		tmp[i] = arg->argv[arg->argc][*adr + i + 1];
 	tmp[i] = '\0';
-	j = env_finder(tmp);
+	j = env_finder(tmp, arg);
 	ft_strcpy(buf, arg->argv[arg->argc]);
 	ft_strclr(&buf[*adr]);
-	if (environ[j])
-		ft_strcat(buf, ft_strchr(environ[j], '=') + 1);
+	if (arg->env[j])
+		ft_strcat(buf, ft_strchr(arg->env[j], '=') + 1);
 	if (arg->argv[arg->argc][*adr + i + 1])
 		ft_strcat(buf, &arg->argv[arg->argc][*adr + i + 1]);
 	ft_strdel(&arg->argv[arg->argc]);
 	arg->argv[arg->argc] = ft_strdup(buf);
 	*adr = (arg->argv[arg->argc][*adr] != '$' ? *adr +
-			ft_strlen(ft_strchr(environ[j], '=') + 1) :
+			ft_strlen(ft_strchr(arg->env[j], '=') + 1) :
 			ft_strlen(arg->argv[arg->argc]));
 }
 

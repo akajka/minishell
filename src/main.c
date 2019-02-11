@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:31:01 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/10 14:55:55 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 19:09:48 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,28 @@ void			loop(t_arg *arg, int *count, char c)
 		{
 			if (buf[0] == ';' && ft_strchr_int(arg->buf, '"') % 2)
 				continue ;
+			arg->buf[++*count] = '\0';
 			arg->sig = (buf[0] == ';' ? 1 : 0);
 			if (c != '\n')
 				break ;
 			handle_arg(arg, count);
 		}
+	}
+}
+
+void			env_cpy(t_arg *arg)
+{
+	extern char	**environ;
+	int			count;
+
+	count = -1;
+	while (environ[++count])
+		continue ;
+	arg->env = (char **)malloc(sizeof(char *) * (count + 1));
+	arg->env[count] = NULL;
+	while (--count >= 0)
+	{
+		arg->env[count] = ft_strdup(environ[count]);
 	}
 }
 
@@ -79,8 +96,8 @@ int				main(void)
 	int			count;
 
 	arg = (t_arg *)malloc(sizeof(arg));
+	env_cpy(arg);
 	count = -1;
-	ft_strclr(arg->buf);
 	loop(arg, &count, '\n');
 	return (EXIT_SUCCESS);
 }

@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 19:29:46 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/10 15:06:36 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 20:11:29 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,14 @@ int				create_path(char *path, char *tmp, t_arg *arg)
 
 void			child_process(t_arg *arg, char *tmp)
 {
-	extern char **environ;
 	int			i;
 	char		path[1024];
 
-	i = 0;
+	i =  0;
 	ft_strcpy(path, arg->argv[0]);
 	while (path[0] != '\0')
 	{
-		execve(path, arg->argv, environ);
+		execve(path, arg->argv, arg->env);
 		tmp += i;
 		if (*(tmp += 1) == '\0')
 			break ;
@@ -52,16 +51,15 @@ void			child_process(t_arg *arg, char *tmp)
 
 void			system_builtins(t_arg *arg)
 {
-	extern char	**environ;
 	int			i;
 	pid_t		pid;
 	char		*tmp;
 
 	i = -1;
 	pid = fork();
-	while (environ[++i] && ft_strncmp(environ[i], "PATH=", 5))
+	while (arg->env[++i] && ft_strncmp(arg->env[i], "PATH=", 5))
 		continue ;
-	tmp = ft_strchr(*(environ + i), '=') + 1;
+	tmp = ft_strchr(*(arg->env + i), '=') + 1;
 	if (pid == 0)
 		child_process(arg, tmp);
 	else
@@ -85,7 +83,7 @@ void			find_command(t_arg *arg)
 	else if (!ft_strcmp(arg->argv[0], "clear"))
 		write(1, "\e[1;1H\e[2J", 11);
 	else if (!ft_strcmp(arg->argv[0], "exit"))
-		exec_exit(arg);
+		exit(EXIT_SUCCESS);
 	else
 		system_builtins(arg);
 }

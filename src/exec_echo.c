@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 16:33:21 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/10 15:10:41 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 20:07:09 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void		exec_echo(t_arg *arg)
 		if (arg->argv[i][j] == '`')
 			handle_echo(&arg->argv[i][j]);
 		write(1, " ", 1);
+		i++;
 	}
 	write(1, "\n", 1);
 }

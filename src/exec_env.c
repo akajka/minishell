@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:14:15 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/09 22:33:12 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 18:56:03 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,14 @@
 
 void			exec_env(t_arg *arg)
 {
-	extern char **environ;
 	int			count;
 
 	count = -1;
 	if (arg->argc < 2)
-		while (environ[++count])
+		while (arg->env[++count])
 		{
-			write(1, environ[count], ft_strlen(environ[count]));
-			if (environ[count + 1] && environ[count + 1][0])
+			write(1, arg->env[count], ft_strlen(arg->env[count]));
+			if (arg->env[count + 1] && arg->env[count + 1][0])
 				write(1, "\n", 1);
 		}
 	else
@@ -32,7 +31,6 @@ void			exec_env(t_arg *arg)
 
 void			exec_setenv(t_arg *arg)
 {
-	extern char **environ;
 	int			i;
 	int			n;
 
@@ -40,16 +38,13 @@ void			exec_setenv(t_arg *arg)
 	if (n)
 	{
 		i = -1;
-		while (environ[++i] && ft_strncmp(environ[i], arg->argv[1], n))
+		while (arg->env[++i] && ft_strncmp(arg->env[i], arg->argv[1], n))
 			continue ;
-		if (environ[i])
-			ft_strclr(environ[i]);
+		if (arg->env[i])
+			ft_strdel(&arg->env[i]);
 		else
-		{
-			environ[i] = (char *)malloc(ft_strlen(arg->argv[1]) + 1);
-			environ[i + 1] = NULL;
-		}
-		ft_strcpy(environ[i], arg->argv[1]);
+			arg->env[i + 1] = NULL;
+		arg->env[i] = ft_strdup(arg->argv[1]);
 	}
 	else
 		write(2, "usage setenv\n", 13);
@@ -57,15 +52,14 @@ void			exec_setenv(t_arg *arg)
 
 void			exec_unsetenv(t_arg *arg)
 {
-	extern char **environ;
 	int			i;
 
 	i = -1;
 	if (arg->argc == 2)
 	{
-		i = env_finder(arg->argv[1]);
-		if (environ[i])
-			ft_strclr(environ[i]);
+		i = env_finder(arg->argv[1], arg);
+		if (arg->env[i])
+			ft_strdel(&arg->env[i]);
 		else
 			write(2, "variable not found\n", 19);
 	}
