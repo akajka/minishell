@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:31:01 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/11 19:09:48 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 22:36:25 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,7 @@ void			env_cpy(t_arg *arg)
 	arg->env = (char **)malloc(sizeof(char *) * (count + 1));
 	arg->env[count] = NULL;
 	while (--count >= 0)
-	{
 		arg->env[count] = ft_strdup(environ[count]);
-	}
 }
 
 int				main(void)
@@ -97,6 +95,7 @@ int				main(void)
 
 	arg = (t_arg *)malloc(sizeof(arg));
 	env_cpy(arg);
+	signal(SIGINT, sig_handl);
 	count = -1;
 	loop(arg, &count, '\n');
 	return (EXIT_SUCCESS);

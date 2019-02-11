@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 19:29:46 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/11 20:11:29 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 22:35:24 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void			child_process(t_arg *arg, char *tmp)
 	while (path[0] != '\0')
 	{
 		execve(path, arg->argv, arg->env);
+		if (!tmp)
+			break ;
 		tmp += i;
 		if (*(tmp += 1) == '\0')
 			break ;
@@ -59,7 +61,10 @@ void			system_builtins(t_arg *arg)
 	pid = fork();
 	while (arg->env[++i] && ft_strncmp(arg->env[i], "PATH=", 5))
 		continue ;
-	tmp = ft_strchr(*(arg->env + i), '=') + 1;
+	if (arg->env[i])
+		tmp = ft_strchr(*(arg->env + i), '=') + 1;
+	else
+		tmp = NULL;
 	if (pid == 0)
 		child_process(arg, tmp);
 	else

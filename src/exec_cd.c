@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:55:11 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/11 20:55:00 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 22:24:22 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void			exec_cd(t_arg *arg)
 		{
 			write(2, "cd: no such file or directory: ", 31);
 			write(2, (arg->argv[1] ? arg->argv[1] :
-						gethome(arg->env), ft_strlen(arg->argv[1]));
+						gethome(arg->env)), ft_strlen(arg->argv[1]));
 			write(2, "\n", 1);
 		}
 	}

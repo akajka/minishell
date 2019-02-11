@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:14:15 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/11 18:56:03 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 22:44:15 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ void			exec_unsetenv(t_arg *arg)
 	{
 		i = env_finder(arg->argv[1], arg);
 		if (arg->env[i])
-			ft_strdel(&arg->env[i]);
+			ft_strclr(arg->env[i]);
 		else
 			write(2, "variable not found\n", 19);
 	}

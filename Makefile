@@ -4,7 +4,8 @@ SRC_DIR = ./src/
 OBJ_DIR = ./obj/
 INC_DIR = ./inc/
 
-SRC = main.c find_command.c getargv.c exec_cd.c exec_echo.c exec_env.c exec_pwd.c
+SRC = main.c find_command.c getargv.c exec_cd.c\
+	  exec_echo.c exec_env.c exec_pwd.c exec_signal.c
 
 OBJ = $(addprefix $(OBJ_DIR), $(SRC:.c=.o))
 

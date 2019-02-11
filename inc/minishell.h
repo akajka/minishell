@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/11 18:55:47 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/11 22:22:43 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,5 +47,6 @@ void			exec_unsetenv(t_arg *arg);
 void			exec_cd(t_arg *arg);
 void			exec_pwd(t_arg *arg);
 void			exec_exit(t_arg *arg);
+void			sig_handl(int sig);
 
 #endif
