@@ -6,60 +6,64 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:14:15 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/11 22:44:15 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/12 23:47:53 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void			exec_env(t_arg *arg)
+
+void			exec_env(void)
 {
 	int			count;
 
 	count = -1;
-	if (arg->argc < 2)
-		while (arg->env[++count])
+	if (g_arg->argc < 2)
+		while (g_arg->env[++count])
 		{
-			write(1, arg->env[count], ft_strlen(arg->env[count]));
-			if (arg->env[count + 1] && arg->env[count + 1][0])
+			write(1, g_arg->env[count], ft_strlen(g_arg->env[count]));
+			if (g_arg->env[count + 1] && g_arg->env[count + 1][0])
 				write(1, "\n", 1);
 		}
 	else
-		write(2, "pwd: too many arguments", 23);
+		write(2, "env: too many g_arguments", 23);
 	write(2, "\n", 1);
 }
 
-void			exec_setenv(t_arg *arg)
+void			exec_setenv(char *env)
 {
 	int			i;
 	int			n;
 
-	n = (arg->argc == 2 ? ft_strchr_int(arg->argv[1], '=') : 0);
+	n = ((g_arg->argc == 2 && env) ? ft_strchr_int(env, '=') : 0);
 	if (n)
 	{
-		i = -1;
-		while (arg->env[++i] && ft_strncmp(arg->env[i], arg->argv[1], n))
-			continue ;
-		if (arg->env[i])
-			ft_strdel(&arg->env[i]);
+		i = env_finder(env, n);
+		if (g_arg->env[i])
+			ft_strdel(&g_arg->env[i]);
 		else
-			arg->env[i + 1] = NULL;
-		arg->env[i] = ft_strdup(arg->argv[1]);
+			g_arg->env[i] = NULL;
+		g_arg->env[i] = ft_strdup(g_arg->argv[1]);
 	}
 	else
-		write(2, "usage setenv\n", 13);
+		write(2, "\n", 13);
 }
 
-void			exec_unsetenv(t_arg *arg)
+void			exec_unsetenv(char *env)
 {
 	int			i;
 
 	i = -1;
-	if (arg->argc == 2)
+	if (g_arg->argc == 2 && env)
 	{
-		i = env_finder(arg->argv[1], arg);
-		if (arg->env[i])
-			ft_strclr(arg->env[i]);
+		i = env_finder(env, ft_strlen(env));
+		if (g_arg->env[i])
+		{
+			ft_strdel(&g_arg->env[i--]);
+			while (g_arg->env[++i + 1])
+				g_arg->env[i] = g_arg->env[i + 1];
+			g_arg->env[i] = NULL;
+		}
 		else
 			write(2, "variable not found\n", 19);
 	}

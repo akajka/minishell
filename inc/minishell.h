@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/11 22:22:43 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/13 00:52:22 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@
 # include <signal.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <term.h>
 # include "../libft/libft.h"
 
 typedef struct	s_arg
 {
+	char		*welcome_str;
 	char		**env;
 	char		oldpwd[1024];
 	int			sig;
@@ -31,22 +33,25 @@ typedef struct	s_arg
 	char		buf[1024];
 }				t_arg;
 
-void			loop(t_arg *arg, int *count, char c);
-void			parse_buf(t_arg *arg, int i);
-void			findchar(t_arg *arg, char c, int *count);
-void			getargv(t_arg *arg);
-int				env_finder(char *tmp, t_arg *arg);
-void			hendle_arg(t_arg *arg);
-void			find_command(t_arg *arg);
-void			system_builtins(t_arg *arg);
-void			exec_echo(t_arg *arg);
-void			exec_history(t_arg *arg);
-void			exec_env(t_arg *arg);
-void			exec_setenv(t_arg *arg);
-void			exec_unsetenv(t_arg *arg);
-void			exec_cd(t_arg *arg);
-void			exec_pwd(t_arg *arg);
-void			exec_exit(t_arg *arg);
+t_arg			*g_arg;
+void			env_cpy();
+void			clean_arg();
+void			loop();
+void			welcome();
+void			getargv();
+int				env_finder(char *env, int len);
+char			*get_env(char *env);
+void			hendle_arg();
+void			find_command();
+void			system_builtins();
+void			exec_echo();
+void			exec_history();
+void			exec_env();
+void			exec_setenv(char *env);
+void			exec_unsetenv(char *env);
+void			exec_cd();
+void			exec_pwd();
+void			exec_exit();
 void			sig_handl(int sig);
 
 #endif

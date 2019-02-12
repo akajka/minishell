@@ -6,62 +6,24 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 16:33:21 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/11 20:07:09 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/12 22:22:49 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			output_echo(char *argv)
+void		exec_echo(void)
 {
 	int		i;
 
 	i = 0;
-	while (argv[i])
+	while (++i < g_arg->argc)
 	{
-		if ((argv[i] != '\"' && argv[i] != '`' && (argv[i] != '\'' ||
-						(argv[i] == '\'' &&
-						i - 1 >= 0 && ft_strchr(argv, '\"')))) ||
-				(i - 1 > 0 && argv[i - 1] == '\\'))
-			write(1, &argv[i], 1);
-		if (argv[i] == '`')
-			return (i);
-		i++;
-	}
-	return (i);
-}
-
-void		handle_echo(char *adr)
-{
-	t_arg	tmp_arg;
-	int		count;
-	int		ret;
-
-	tmp_arg.argv = ft_strsplit(adr, '`');
-	tmp_arg.argc = 1;
-	count = -1;
-	ret = 0;
-	while (tmp_arg.argv[++count])
-	{
-		find_command(&tmp_arg);
-		free(tmp_arg.argv[count]);
-	}
-	free(tmp_arg.argv);
-}
-
-void		exec_echo(t_arg *arg)
-{
-	int		i;
-	int		j;
-
-	i = 1;
-	while (arg->argc-- != 1)
-	{
-		j = output_echo(arg->argv[i]);
-		if (arg->argv[i][j] == '`')
-			handle_echo(&arg->argv[i][j]);
+		if (i == 1 && !ft_strcmp(g_arg->argv[1], "-n"))
+			continue ;
+		write(1, g_arg->argv[i], ft_strlen(g_arg->argv[i]));
 		write(1, " ", 1);
-		i++;
 	}
-	write(1, "\n", 1);
+	if (g_arg->argv[1] && ft_strcmp(g_arg->argv[1], "-n"))
+		write(1, "\n", 1);
 }
