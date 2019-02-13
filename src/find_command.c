@@ -6,46 +6,51 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 19:29:46 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/12 23:36:41 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/13 04:01:53 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int				create_path(char *path, char *tmp)
+char			*create_path(char *tmp)
 {
 	int			i;
+	int			adr;
+	char		*buf;
+	char		*temp;
 
-	i = 0;
-	while (*(tmp + i) && *(tmp + i) != ':')
+	i = -1;
+	while (tmp && (adr = ft_strchr_int(tmp, ':')))
 	{
-		path[i] = *(tmp + i);
-		i++;
+		buf = ft_strsub(tmp, 0, (adr ? adr : ft_strlen(tmp)));
+		temp = ft_strjoin(buf, "/");
+		free(buf);
+		buf = ft_strjoin(temp, g_arg->argv[0]);
+		free(temp);
+		if (!access(buf, 0))
+			return (buf);
+		tmp += adr + 1;
+		free(buf);
 	}
-	path[i] = '/';
-	ft_strcat(path, g_arg->argv[0]);
-	return (i);
+	return (NULL);
 }
 
 void			child_process(char *tmp)
 {
 	int			i;
-	char		path[1024];
+	t_stat		stat;
+	char		*path;
 
 	i =  0;
-	ft_strcpy(path, g_arg->argv[0]);
-	while (path[0] != '\0')
+	path = ((!tmp || ft_strchr(g_arg->argv[0], '/')) ?
+			g_arg->argv[0] : create_path(tmp));
+	if (lstat(path, &stat) & S_IRUSR)
+		write(2, "minishell: permission denied: ", 30);
+	else
 	{
 		execve(path, g_arg->argv, g_arg->env);
-		if (!tmp)
-			break ;
-		tmp += i;
-		if (*(tmp += 1) == '\0')
-			break ;
-		ft_strclr(path);
-		i = create_path(path, tmp);
+		write(2, "minishell: command not found: ", 30);
 	}
-	write(2, "minishell: command not found: ", 30);
 	write(2, g_arg->argv[0], ft_strlen(g_arg->argv[0]));
 	write(2, "\n", 1);
 	exit(1);
@@ -53,17 +58,10 @@ void			child_process(char *tmp)
 
 void			system_builtins(void)
 {
-	int			i;
 	pid_t		pid;
 	char		*tmp;
 
-	i = -1;
-	while (g_arg->env[++i] && ft_strncmp(g_arg->env[i], "PATH=", 5))
-		continue ;
-	if (g_arg->env[i])
-		tmp = ft_strchr(*(g_arg->env + i), '=') + 1;
-	else
-		tmp = NULL;
+	tmp = get_env("PATH=");
 	pid = fork();
 	if (pid == 0)
 		child_process(tmp);

@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:14:15 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/12 23:47:53 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/13 02:23:28 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void			exec_setenv(char *env)
 	int			i;
 	int			n;
 
-	n = ((g_arg->argc == 2 && env) ? ft_strchr_int(env, '=') : 0);
+	n = (env ? ft_strchr_int(env, '=') : 0);
 	if (n)
 	{
 		i = env_finder(env, n);
@@ -43,7 +43,7 @@ void			exec_setenv(char *env)
 			ft_strdel(&g_arg->env[i]);
 		else
 			g_arg->env[i] = NULL;
-		g_arg->env[i] = ft_strdup(g_arg->argv[1]);
+		g_arg->env[i] = ft_strdup(env);
 	}
 	else
 		write(2, "\n", 13);

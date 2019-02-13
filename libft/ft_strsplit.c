@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/27 11:45:03 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/08 23:06:23 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/13 01:59:16 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char			**ft_strsplit(char const *s, char c)
 		return (NULL);
 	while (nb_word--)
 	{
-		while (*s == c && *s != '\0')
+		while ((*s == c || *s == '\t') && *s != '\0')
 			s++;
 		t[index] = ft_strsub((const char *)s, 0, ft_wlen((const char *)s, c));
 		if (t[index] == NULL)
