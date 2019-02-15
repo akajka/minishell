@@ -1,30 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exec_signal.c                                      :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/02/11 21:19:25 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/13 23:03:16 by akorobov         ###   ########.fr       */
+/*   Created: 2018/10/25 12:34:48 by akorobov          #+#    #+#             */
+/*   Updated: 2019/02/15 11:14:13 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-void		sig_handl(int sig)
+int		ft_strrchr_int(const char *str, int ch)
 {
-	pid_t	pid;
+	int		i;
 
-	pid = getpid();
-	if (sig == SIGINT && pid == 0)
-		kill(pid, SIGINT);
-	else
-	{
-		write(1, "\n", 1);
-		if (g_arg->buf[0] == '\0')
-			welcome();
-//		clean_arg();
-//		loop();
-	}
+	i = ft_strlen(str);
+	if (ch == '\0')
+		return (i);
+	while (i-- && str[i])
+		if (str[i] == ch)
+			return (i);
+	return (0);
 }

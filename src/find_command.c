@@ -6,53 +6,69 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 19:29:46 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/13 04:01:53 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/15 12:21:09 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char			*create_path(char *tmp)
+int				create_path(char *path, char *tmp, char c)
 {
 	int			i;
-	int			adr;
-	char		*buf;
-	char		*temp;
 
-	i = -1;
-	while (tmp && (adr = ft_strchr_int(tmp, ':')))
+	i = 0;
+	if (!ft_strchr(tmp, c))
+		return (0);
+	while (*(tmp + i) && *(tmp + i) != c)
 	{
-		buf = ft_strsub(tmp, 0, (adr ? adr : ft_strlen(tmp)));
-		temp = ft_strjoin(buf, "/");
-		free(buf);
-		buf = ft_strjoin(temp, g_arg->argv[0]);
-		free(temp);
-		if (!access(buf, 0))
-			return (buf);
-		tmp += adr + 1;
-		free(buf);
+		path[i] = *(tmp + i);
+		i++;
 	}
-	return (NULL);
+	path[i] = '/';
+	path[i + 1] = '\0';
+	return (i);
+}
+
+char			*get_dir(char *path)
+{
+	char		*dir;
+	int			len;
+
+	if (!path)
+		return (NULL);
+	len = ft_strrchr_int(path, '/');
+	dir = ft_strsub(path, 0, len);
+	return (dir);
 }
 
 void			child_process(char *tmp)
 {
 	int			i;
-	t_stat		stat;
-	char		*path;
+	int			perm_test;
+	char		path[1024];
 
-	i =  0;
-	path = ((!tmp || ft_strchr(g_arg->argv[0], '/')) ?
-			g_arg->argv[0] : create_path(tmp));
-	if (lstat(path, &stat) & S_IRUSR)
+	perm_test = 0;
+	ft_strclr(path);
+	i = create_path(path, g_arg->argv[0], '/');
+	while (path[0] != '\0' || !i)
+	{
+		if (!access(path, R_OK))
+			perm_test = !(perm_test);
+		ft_strcat(path, g_arg->argv[0]);
+		execve(path, g_arg->argv, g_arg->env);
+		if (!tmp)
+			break ;
+		tmp += i;
+		if (*(tmp += 1) == '\0')
+			break ;
+		ft_strclr(path);
+		i = create_path(path, tmp, ':');
+	}
+	if (!perm_test && tmp)
 		write(2, "minishell: permission denied: ", 30);
 	else
-	{
-		execve(path, g_arg->argv, g_arg->env);
 		write(2, "minishell: command not found: ", 30);
-	}
-	write(2, g_arg->argv[0], ft_strlen(g_arg->argv[0]));
-	write(2, "\n", 1);
+	ft_putendl_fd(g_arg->argv[0], 2);
 	exit(1);
 }
 

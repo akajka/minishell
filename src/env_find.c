@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/12 23:10:13 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/13 02:34:26 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/13 16:14:44 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,37 @@ char		*get_env(char *env)
 void		env_cpy(char **env)
 {
 	int		count;
+	char	tmp[1024];
 
 	count = -1;
+	g_arg->env = (char **)malloc(sizeof(char *) * 1000);
 	while (env[++count])
-		continue ;
-	if (count)
 	{
-		g_arg->env = (char **)malloc(sizeof(char *) * (count + 1));
-		g_arg->env[count] = NULL;
-		while (--count >= 0)
+		if (!ft_strncmp(env[count], "SHELL=", 6))
+		{
+			getcwd(tmp, 1024);
+			ft_stracat(tmp, "SHELL=");
+			ft_strcat(tmp, "/minishell");
+			g_arg->env[count] = ft_strdup(tmp);
+		}
+		else
 			g_arg->env[count] = ft_strdup(env[count]);
 	}
+	g_arg->env[count] = NULL;
+	if (!env[0])
+		create_env();
+}
+
+void		create_env(void)
+{
+	char	tmp[1024];
+
+	g_arg->env[0] = ft_strdup("HOME=/Users/akorobov");
+	g_arg->env[1] = ft_strdup("PATH=/usr/bin:/bin");
+	getcwd(tmp, 1024);
+	ft_stracat(tmp, "SHELL=");
+	ft_strcat(tmp, "/minishell");
+	g_arg->env[2] = ft_strdup(tmp);
+	ft_strclr(tmp);
+	g_arg->env[3] = NULL;
 }

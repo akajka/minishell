@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:55:11 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/13 03:23:12 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/13 11:44:47 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ char			*find_path()
 
 void			print_err_cd(char *path)
 {
-	if (!access(path, 0))
-		ft_putstr_fd("cd : file not found", 2);
-	if (!access(path, 0))
-		ft_putstr_fd("cd : file not found", 2);
+	if (access(path, 0))
+		ft_putstr_fd("cd : file not found: ", 2);
+	else if (access(path, 3))
+		ft_putstr_fd("cd : permission denied: ", 2);
 	else
 		ft_putstr_fd("cd: string not in pwd: ", 2);
 	ft_putendl_fd(path, 2);

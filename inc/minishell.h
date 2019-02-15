@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/13 03:54:47 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/13 19:54:40 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,15 @@
 # include <signal.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <dirent.h>
 # include "libft.h"
 
 typedef struct stat		t_stat;
 
 typedef struct			s_status
 {
-	int					bquote;
-	int					quote;
+	int					occurrence;
+	int					position;
 }						t_status;
 
 typedef struct			s_arg
@@ -41,7 +42,8 @@ typedef struct			s_arg
 }						t_arg;
 
 t_arg					*g_arg;
-void					env_cpy();
+void					env_cpy(char **env);
+void					create_env();
 void					clean_arg();
 void					loop();
 void					welcome();

@@ -16,6 +16,7 @@ SRC = ft_lstmap.c\
 	  ft_atoi.c\
 	  ft_memchr.c\
 	  ft_strcat.c\
+	  ft_stracat.c\
 	  ft_strncpy.c\
 	  ft_bzero.c\
 	  ft_memcmp.c\
@@ -34,6 +35,7 @@ SRC = ft_lstmap.c\
 	  ft_memmove.c\
 	  ft_strcpy.c\
 	  ft_strrchr.c\
+	  ft_strrchr_int.c\
 	  ft_isascii.c\
 	  ft_memset.c\
 	  ft_strdel.c\
