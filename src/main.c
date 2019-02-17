@@ -6,13 +6,13 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:31:01 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/17 13:22:26 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/17 13:52:39 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void			clean_arg()
+void			clean_arg(void)
 {
 	int			i;
 
@@ -24,7 +24,7 @@ void			clean_arg()
 	ft_strclr(g_arg->buf);
 }
 
-void			handle_g_arg()
+void			handle_g_arg(void)
 {
 	if (g_arg->buf[0] != '\0')
 	{

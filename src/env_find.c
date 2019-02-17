@@ -6,11 +6,23 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/12 23:10:13 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/13 16:14:44 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/17 13:51:23 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void		env_name(char *tmp1, int *i_tmp1, int *i)
+{
+	if (g_arg->stat.bq)
+		while (g_arg->buf[*i] != '\0' && g_arg->buf[*i] != '/' &&
+				status_argc(g_arg->buf, g_arg->buf[*i], *i) && g_arg->stat.bq)
+			tmp1[(*i_tmp1)++] = g_arg->buf[(*i)++];
+	else
+		while (g_arg->buf[*i] != '\0' && g_arg->buf[*i] != '/' &&
+				g_arg->buf[*i] != ' ' && g_arg->buf[*i] != '\t')
+			tmp1[(*i_tmp1)++] = g_arg->buf[(*i)++];
+}
 
 int			env_finder(char *env, int len)
 {

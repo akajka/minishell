@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:55:11 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/13 11:44:47 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/17 13:52:06 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void			pwd_control(char *pwd)
 	exec_setenv(buf);
 }
 
-char			*find_path()
+char			*find_path(void)
 {
 	if (g_arg->argv[1] && !ft_strcmp(g_arg->argv[1], "-"))
 		return (getenv("OLDPWD"));

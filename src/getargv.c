@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 20:36:06 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/17 13:33:48 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/17 13:53:15 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int				getargc(void)
 	return (ret);
 }
 
-void			add_part(char *tmp, int	*i, int *i_tmp)
+void			add_part(char *tmp, int *i, int *i_tmp)
 {
 	char		tmp1[1024];
 	char		*env;
@@ -62,14 +62,7 @@ void			add_part(char *tmp, int	*i, int *i_tmp)
 	else if (g_arg->buf[*i] == '$' && (*i >= 1 ?
 				g_arg->buf[*i - 1] != '\\' : 1) && !g_arg->stat.q && ++(*i))
 	{
-		if (g_arg->stat.bq)
-			while (g_arg->buf[*i] != '\0' && g_arg->buf[*i] != '/' &&
-					status_argc(g_arg->buf, g_arg->buf[*i], *i) && g_arg->stat.bq)
-				tmp1[i_tmp1++] = g_arg->buf[(*i)++];
-		else
-			while (g_arg->buf[*i] != '\0' && g_arg->buf[*i] != '/' &&
-					g_arg->buf[*i] != ' ' && g_arg->buf[*i] != '\t')
-				tmp1[i_tmp1++] = g_arg->buf[(*i)++];
+		env_name(tmp1, &i_tmp1, i);
 		*i -= 1;
 		tmp1[i_tmp1++] = '=';
 		tmp1[i_tmp1] = '\0';
@@ -80,7 +73,7 @@ void			add_part(char *tmp, int	*i, int *i_tmp)
 		tmp[*i_tmp] = g_arg->buf[*i];
 }
 
-void			handle_buf()
+void			handle_buf(void)
 {
 	int			i;
 	int			j;
@@ -105,7 +98,6 @@ void			handle_buf()
 		}
 		tmp[j] = '\0';
 		g_arg->argv[argc] = ft_strdup(tmp);
-		printf("%s\n", g_arg->argv[argc]);
 		ft_strclr(tmp);
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/17 04:04:53 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/17 13:50:12 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,9 @@ void					loop();
 void					welcome();
 void					getargv();
 int						getargc();
+void					env_name(char *tmp1, int *i_tmp1, int *i);
 int						env_finder(char *env, int len);
+int						status_argc(char *buf, char c, int i);
 char					*get_env(char *env);
 void					hendle_arg();
 void					find_command();
