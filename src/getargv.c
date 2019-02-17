@@ -6,18 +6,18 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 20:36:06 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/17 02:55:19 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/17 13:33:48 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int				status_argc(char c, int i)
+int				status_argc(char *buf, char c, int i)
 {
-	if (c == '\"' && (i >= 1 ? g_arg->buf[i - 1] != '\\' : 1)
+	if (c == '\"' && (i >= 1 ? buf[i - 1] != '\\' : 1)
 			&& !g_arg->stat.q)
 		g_arg->stat.bq = !(g_arg->stat.bq);
-	else if (c == '\'' && (i >= 1 ? g_arg->buf[i - 1] != '\\' : 1)
+	else if (c == '\'' && (i >= 1 ? buf[i - 1] != '\\' : 1)
 			&& !g_arg->stat.bq)
 		g_arg->stat.q = !(g_arg->stat.q);
 	else if (!g_arg->stat.bq && !g_arg->stat.q && (c == ' ' || c == '\t'))
@@ -40,10 +40,44 @@ int				getargc(void)
 				i++;
 		if (!ft_strlen(&g_arg->buf[i]))
 			return (ret - 1);
-		while (g_arg->buf[i] != '\0' && status_argc(g_arg->buf[i], i))
+		while (g_arg->buf[i] != '\0' &&
+				status_argc(g_arg->buf, g_arg->buf[i], i))
 			i++;
 	}
 	return (ret);
+}
+
+void			add_part(char *tmp, int	*i, int *i_tmp)
+{
+	char		tmp1[1024];
+	char		*env;
+	int			i_tmp1;
+
+	i_tmp1 = 0;
+	if (((g_arg->buf[*i] == '\"' && !g_arg->stat.q) ||
+					(g_arg->buf[*i] == '\'' && !g_arg->stat.bq) ||
+					g_arg->buf[*i] == '\\') &&
+				(*i >= 1 ? g_arg->buf[*i - 1] != '\\' : 1))
+		*i_tmp -= 1;
+	else if (g_arg->buf[*i] == '$' && (*i >= 1 ?
+				g_arg->buf[*i - 1] != '\\' : 1) && !g_arg->stat.q && ++(*i))
+	{
+		if (g_arg->stat.bq)
+			while (g_arg->buf[*i] != '\0' && g_arg->buf[*i] != '/' &&
+					status_argc(g_arg->buf, g_arg->buf[*i], *i) && g_arg->stat.bq)
+				tmp1[i_tmp1++] = g_arg->buf[(*i)++];
+		else
+			while (g_arg->buf[*i] != '\0' && g_arg->buf[*i] != '/' &&
+					g_arg->buf[*i] != ' ' && g_arg->buf[*i] != '\t')
+				tmp1[i_tmp1++] = g_arg->buf[(*i)++];
+		*i -= 1;
+		tmp1[i_tmp1++] = '=';
+		tmp1[i_tmp1] = '\0';
+		ft_strcat(tmp, (env = get_env(tmp1)));
+		*i_tmp += ft_strlen(env) - 1;
+	}
+	else
+		tmp[*i_tmp] = g_arg->buf[*i];
 }
 
 void			handle_buf()
@@ -62,10 +96,16 @@ void			handle_buf()
 			while (g_arg->buf[i] != '\0' &&
 					(g_arg->buf[i] == ' ' || g_arg->buf[i] == '\t'))
 				i++;
-		while (g_arg->buf[i] != '\0' && status_argc(g_arg->buf[i], i))
-			tmp[j++] = g_arg->buf[i++];
+		while (g_arg->buf[i] != '\0' &&
+				status_argc(g_arg->buf, g_arg->buf[i], i))
+		{
+			add_part(tmp, &i, &j);
+			i++;
+			j++;
+		}
 		tmp[j] = '\0';
 		g_arg->argv[argc] = ft_strdup(tmp);
+		printf("%s\n", g_arg->argv[argc]);
 		ft_strclr(tmp);
 	}
 }

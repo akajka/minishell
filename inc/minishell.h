@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/13 17:32:02 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/16 19:22:28 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/17 04:04:53 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ typedef struct stat		t_stat;
 typedef struct			s_status
 {
 	int					bq;
-	int					bq_pos;
 	int					q;
-	int					q_pos;
 }						t_status;
 
 typedef struct			s_arg
