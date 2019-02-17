@@ -6,12 +6,11 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/02/04 17:14:15 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/13 02:23:28 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/15 12:39:58 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void			exec_env(void)
 {
@@ -35,7 +34,7 @@ void			exec_setenv(char *env)
 	int			i;
 	int			n;
 
-	n = (env ? ft_strchr_int(env, '=') : 0);
+	n = (env && g_arg->argc == 2 ? ft_strchr_int(env, '=') : 0);
 	if (n)
 	{
 		i = env_finder(env, n);
@@ -46,7 +45,7 @@ void			exec_setenv(char *env)
 		g_arg->env[i] = ft_strdup(env);
 	}
 	else
-		write(2, "\n", 13);
+		ft_putendl_fd("Incorrect input\nExample: \"setenv USER=username\"", 2);
 }
 
 void			exec_unsetenv(char *env)
@@ -68,5 +67,5 @@ void			exec_unsetenv(char *env)
 			write(2, "variable not found\n", 19);
 	}
 	else
-		write(2, "usage unsetenv\n", 15);
+		ft_putendl_fd("Incorrect input\nExample: \"unsetenv USER\"", 2);
 }

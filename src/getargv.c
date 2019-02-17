@@ -6,87 +6,76 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/31 20:36:06 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/13 17:42:01 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/17 02:55:19 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int				manage_env(int adr)
+int				status_argc(char c, int i)
+{
+	if (c == '\"' && (i >= 1 ? g_arg->buf[i - 1] != '\\' : 1)
+			&& !g_arg->stat.q)
+		g_arg->stat.bq = !(g_arg->stat.bq);
+	else if (c == '\'' && (i >= 1 ? g_arg->buf[i - 1] != '\\' : 1)
+			&& !g_arg->stat.bq)
+		g_arg->stat.q = !(g_arg->stat.q);
+	else if (!g_arg->stat.bq && !g_arg->stat.q && (c == ' ' || c == '\t'))
+		return (0);
+	return (1);
+}
+
+int				getargc(void)
+{
+	int			i;
+	int			ret;
+
+	i = 0;
+	ret = 0;
+	while (g_arg->buf[i] != '\0' && ++ret)
+	{
+		if (g_arg->buf[i] == '\t' || g_arg->buf[i] == ' ')
+			while (g_arg->buf[i] != '\0' &&
+					(g_arg->buf[i] == ' ' || g_arg->buf[i] == '\t'))
+				i++;
+		if (!ft_strlen(&g_arg->buf[i]))
+			return (ret - 1);
+		while (g_arg->buf[i] != '\0' && status_argc(g_arg->buf[i], i))
+			i++;
+	}
+	return (ret);
+}
+
+void			handle_buf()
 {
 	int			i;
 	int			j;
-	char		buf[1024];
+	int			argc;
 	char		tmp[1024];
 
-	i = -1;
-	while (++i >= 0 && g_arg->argv[g_arg->argc][adr + i + 1] &&
-			g_arg->argv[g_arg->argc][adr + i + 1] != '/' &&
-			g_arg->argv[g_arg->argc][adr + i + 1] != '$')
-		tmp[i] = g_arg->argv[g_arg->argc][adr + i + 1];
-	tmp[i] = '\0';
-	if (!g_arg->env[(j = env_finder(tmp, ft_strlen(tmp)))])
-		return (ft_strlen(g_arg->argv[g_arg->argc]));
-	ft_strcpy(buf, g_arg->argv[g_arg->argc]);
-	ft_strclr(&buf[adr]);
-	if (g_arg->env[j])
-		ft_strcat(buf, ft_strchr(g_arg->env[j], '=') + 1);
-	if (g_arg->argv[g_arg->argc][adr + i + 1])
-		ft_strcat(buf, &g_arg->argv[g_arg->argc][adr + i + 1]);
-	ft_strdel(&g_arg->argv[g_arg->argc]);
-	g_arg->argv[g_arg->argc] = ft_strdup(buf);
-	return ((g_arg->argv[g_arg->argc][adr] != '$' ? adr +
-			ft_strlen(ft_strchr(g_arg->env[j], '=') + 1) :
-			ft_strlen(g_arg->argv[g_arg->argc])));
-}
-
-void			check_place(t_status *st, int i)
-{
-	if (st->position)
-		g_arg->buf[st->position] = ' ';
-	st->position = (st->position ? 0 : i);
-	st->occurrence = !(st->occurrence);
-}
-
-void			parse_buf(void)
-{
-	t_status	bquote;
-	t_status	quote;
-	int			i;
-
-	i = -1;
-	bquote.occurrence = 0;
-	quote.occurrence = 0;
-	while (g_arg->buf[++i])
+	i = 0;
+	argc = -1;
+	while (g_arg->buf[i] != '\0' && ++argc < g_arg->argc)
 	{
-		if (g_arg->buf[i] == '\"' && !quote.occurrence &&
-				(i - 1 >= 0 ? g_arg->buf[i - 1] != '\\' : 1))
-			check_place(&bquote, i);
-		if (g_arg->buf[i] == '\'' && !bquote.occurrence &&
-				(i - 1 >= 0 && g_arg->buf[i - 1] != '\\'))
-			check_place(&quote, i);
-		
+		j = 0;
+		if (g_arg->buf[i] == '\t' || g_arg->buf[i] == ' ')
+			while (g_arg->buf[i] != '\0' &&
+					(g_arg->buf[i] == ' ' || g_arg->buf[i] == '\t'))
+				i++;
+		while (g_arg->buf[i] != '\0' && status_argc(g_arg->buf[i], i))
+			tmp[j++] = g_arg->buf[i++];
+		tmp[j] = '\0';
+		g_arg->argv[argc] = ft_strdup(tmp);
+		ft_strclr(tmp);
 	}
 }
 
 void			getargv(void)
 {
-	int			i;
-
-	g_arg->argc = -1;
-	parse_buf();
-	g_arg->argv = ft_strsplit(g_arg->buf, ' ');
-	while (g_arg->argv[++g_arg->argc])
-	{
-		if (!ft_strcmp(g_arg->argv[g_arg->argc], "~"))
-		{
-			ft_strdel(&g_arg->argv[g_arg->argc]);
-			g_arg->argv[g_arg->argc] = ft_strdup("$HOME");
-		}
-		i = 0;
-		while (g_arg->argv[g_arg->argc][i] == '$' ||
-				(i = ft_strchr_int(&g_arg->argv[g_arg->argc][i], '$')))
-			i = manage_env(i);
-	}
+	g_arg->stat.bq = 0;
+	g_arg->stat.q = 0;
+	g_arg->argc = getargc();
+	g_arg->argv = (char **)malloc(sizeof(char *) * (g_arg->argc + 1));
+	handle_buf();
 	g_arg->argv[g_arg->argc] = NULL;
 }

@@ -6,7 +6,7 @@
 /*   By: akorobov <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/28 19:29:46 by akorobov          #+#    #+#             */
-/*   Updated: 2019/02/15 12:21:09 by akorobov         ###   ########.fr       */
+/*   Updated: 2019/02/15 12:32:16 by akorobov         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,13 @@ int				create_path(char *path, char *tmp, char c)
 	return (i);
 }
 
-char			*get_dir(char *path)
+void			exec_error(int perm_test, char *tmp)
 {
-	char		*dir;
-	int			len;
-
-	if (!path)
-		return (NULL);
-	len = ft_strrchr_int(path, '/');
-	dir = ft_strsub(path, 0, len);
-	return (dir);
+	if (!perm_test && tmp)
+		write(2, "minishell: permission denied: ", 30);
+	else
+		write(2, "minishell: command not found: ", 30);
+	ft_putendl_fd(g_arg->argv[0], 2);
 }
 
 void			child_process(char *tmp)
@@ -48,7 +45,6 @@ void			child_process(char *tmp)
 	char		path[1024];
 
 	perm_test = 0;
-	ft_strclr(path);
 	i = create_path(path, g_arg->argv[0], '/');
 	while (path[0] != '\0' || !i)
 	{
@@ -58,17 +54,12 @@ void			child_process(char *tmp)
 		execve(path, g_arg->argv, g_arg->env);
 		if (!tmp)
 			break ;
-		tmp += i;
-		if (*(tmp += 1) == '\0')
+		if (*(tmp += i + 1) == '\0')
 			break ;
 		ft_strclr(path);
 		i = create_path(path, tmp, ':');
 	}
-	if (!perm_test && tmp)
-		write(2, "minishell: permission denied: ", 30);
-	else
-		write(2, "minishell: command not found: ", 30);
-	ft_putendl_fd(g_arg->argv[0], 2);
+	exec_error(perm_test, tmp);
 	exit(1);
 }
 
